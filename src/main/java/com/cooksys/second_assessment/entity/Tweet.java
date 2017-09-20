@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Tweet {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private Credentials credentials;
 //	private Client author;
@@ -25,7 +26,7 @@ public class Tweet {
 	private Date posted;
 	private String content;
 //	private HashTag hashTag;
-	private Boolean isActive;
+	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
 	private List<Client> clientsWhoLiked;
 	

@@ -6,7 +6,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Credentials {
 
-//	@Column(unique = true, nullable = false)
 	private String username;
 	private String password;
 

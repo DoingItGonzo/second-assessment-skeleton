@@ -21,6 +21,8 @@ public class TweetService {
 	
 	public TweetService(TweetRepository tweetRepository, ClientMapper clientMapper, TweetMapper tweetMapper) {
 		this.tweetRepository = tweetRepository;
+		this.clientMapper = clientMapper;
+		this.tweetMapper = tweetMapper;
 	}
 
 	public TweetDto getTweet(Integer id) {
@@ -29,8 +31,9 @@ public class TweetService {
 
 	//Return without updated field??
 	public TweetDto deleteTweet(Integer id) {
-		tweetRepository.findOneById(id).setIsActive(false);
-		return tweetMapper.toDto(tweetRepository.findOneById(id));
+		Tweet tweet = tweetRepository.findOneById(id);
+		tweet.setIsActive(false);
+		return tweetMapper.toDto(tweetRepository.save(tweet));
 	}
 
 	public HashTagDto getHashTag(Integer id) {
@@ -43,7 +46,9 @@ public class TweetService {
 	}
 
 	public TweetDto postTweet(TweetDto tweetDto) {
-		Tweet tweet = tweetMapper.fromDto(tweetDto);
+		Tweet tweet = new Tweet();
+		tweet.setContent(tweetDto.getContent());
+		tweet.setCredentials(tweetDto.getCredentials());
 		return tweetMapper.toDto(tweetRepository.save(tweet));
 	}
 
