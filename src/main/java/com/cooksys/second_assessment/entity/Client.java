@@ -1,11 +1,18 @@
 package com.cooksys.second_assessment.entity;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 public class Client {
@@ -13,43 +20,62 @@ public class Client {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	@Column(nullable = false)
-	private Credentials credentials;	
+	private Credentials credentials;
+	@CreationTimestamp
+	@Column(updatable=false)
+	private Date dateOfAccountCreation;
 	private Profile profile;
 	private Boolean isActive = true;
+	@ManyToMany
+	private List<Client> followedFeeds;
+	@ManyToMany(mappedBy="followedFeeds")
+	private List<Client> followers;
+	
 
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 	public Credentials getCredentials() {
 		return credentials;
 	}
-
 	public Profile getProfile() {
 		return profile;
 	}
-
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
 	}
-
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
-	
 	public Boolean getIsActive() {
 		return isActive;
 	}
-
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
+	public Date getDateOfAccountCreation() {
+		return dateOfAccountCreation;
+	}
+	public void setDateOfAccountCreation(Date dateOfAccountCreation) {
+		this.dateOfAccountCreation = dateOfAccountCreation;
+	}
+	
+	public List<Client> getFollowedFeeds() {
+		return followedFeeds;
+	}
+	public List<Client> getFollowers() {
+		return followers;
+	}
+	public void setFollowedFeeds(List<Client> followedFeeds) {
+		this.followedFeeds = followedFeeds;
+	}
+	public void setFollowers(List<Client> followers) {
+		this.followers = followers;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

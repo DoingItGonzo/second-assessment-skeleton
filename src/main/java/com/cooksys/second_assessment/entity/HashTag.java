@@ -3,14 +3,20 @@ package com.cooksys.second_assessment.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 //@Entity
 public class HashTag {
 	
 	@Column(nullable = false)
 	private String label;
+	@CreationTimestamp
+	@Column(nullable=false)
 	private Date firstUsed;
+	// @UpdateTimestamp is refreshed anytime the owning entity is updated
+	@UpdateTimestamp
 	private Date lastUsed;
 	
 	public String getLabel() {

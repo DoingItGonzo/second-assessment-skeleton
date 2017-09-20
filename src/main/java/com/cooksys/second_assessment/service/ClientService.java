@@ -2,9 +2,11 @@ package com.cooksys.second_assessment.service;
 
 
 import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
-
 import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.mapper.ClientMapper;
@@ -12,7 +14,19 @@ import com.cooksys.second_assessment.repository.ClientRepository;
 
 @Service
 public class ClientService {
-	
+	//
+	//
+	//
+	//
+	/// @creationTimestamp
+	// @Make them impossible to update
+	//
+	// Test controllers for default reesponse codes
+	// 
+	//
+	//
+	//
+	//
 	private ClientMapper clientMapper;
 	private ClientRepository clientRepository;
 	
@@ -21,7 +35,6 @@ public class ClientService {
 		this.clientMapper = clientMapper;
 	}
 
-	//Overwrites existing fields with contents of new object. Is that what we want?
 	public ClientDto createClient(ClientDto clientDto) {
 
 		Client client = clientRepository.findByCredentialsUsername(clientDto.getCredentials().getUsername());
@@ -36,7 +49,7 @@ public class ClientService {
 		}
 	}
 
-	public List<ClientDto> getAll() {
+	public List<ClientDto> getAll() {  
 		return clientMapper.fromClientList(clientRepository.findByIsActiveTrue());
 	}
 
@@ -52,9 +65,6 @@ public class ClientService {
 		return clientMapper.toDto(clientRepository.findByCredentialsUsernameAndIsActiveTrue(username));
 	}
 
-	//ERROR
-	//MOTHAH FUCKIN'
-	//HANDLING
 	public ClientDto patchClient(String username, ClientDto clientDto) {
 		Client client = clientRepository.findByCredentialsUsername(username);
 		client.setProfile(clientDto.getProfile());
@@ -69,6 +79,16 @@ public class ClientService {
 		else 
 			client.setIsActive(false);
 			return clientMapper.toDto(clientRepository.save(client));
+
+	}
+
+	public void follow(String followedClient, ClientDto follower) {
+		Client client = clientRepository.findByCredentialsUsername(followedClient);
+		client.getFollowers().add(clientRepository.findByCredentialsUsername(follower.getCredentials().getUsername()));
+	}
+	
+	public List<ClientDto> getFollowers(String username){
+		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowers());
 
 	}
 

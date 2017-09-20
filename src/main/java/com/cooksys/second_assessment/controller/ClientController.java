@@ -50,6 +50,12 @@ public class ClientController {
 		return clientService.getClientAvailable(username);
 	}
 	
+	@GetMapping("users/@{username}/followers")
+	public List<ClientDto> getFollowers(@PathVariable String username) {
+		return clientService.getFollowers(username);
+	}
+	
+	
 	@PostMapping
 	public ClientDto createClient(@RequestBody ClientDto clientDto, HttpServletResponse response) {
 		ClientDto dto = clientService.createClient(clientDto);
@@ -57,6 +63,12 @@ public class ClientController {
 		if (dto != null) response.setStatus(HttpServletResponse.SC_CREATED); 
 		else response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		return dto;
+	}
+	
+	//need a return for the HTTP status code
+	@PostMapping("users/@{username}/follow")
+	public void follow(@PathVariable String username, @RequestBody ClientDto follower){
+		clientService.follow(username, follower);
 	}
 	
 	@PatchMapping("users/@{username}")

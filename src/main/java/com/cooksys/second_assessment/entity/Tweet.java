@@ -1,10 +1,13 @@
 package com.cooksys.second_assessment.entity;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 //@Entity
 public class Tweet {
@@ -13,9 +16,40 @@ public class Tweet {
 	@GeneratedValue
 	private Integer id;
 	private String author;
+	@CreationTimestamp
+	@Column(nullable=false)
 	private Date posted;
 	private String content;
+	public HashTag hashTag;
+	private Boolean isActive;
+	public List<Client> clientsWhoLiked;
 	
+	
+	
+	public List<Client> getClientsWhoLiked() {
+		return clientsWhoLiked;
+	}
+
+	public void setClientsWhoLiked(List<Client> clientsWhoLiked) {
+		this.clientsWhoLiked = clientsWhoLiked;
+	}
+
+	public HashTag getHashTag() {
+		return hashTag;
+	}
+
+	public void setHashTag(HashTag hashTag) {
+		this.hashTag = hashTag;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -24,7 +58,7 @@ public class Tweet {
 		return author;
 	}
 	
-	public Date getPosted() {
+	public Date getPosted() { 
 		return posted;
 	}
 	
