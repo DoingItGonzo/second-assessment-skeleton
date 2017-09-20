@@ -1,18 +1,18 @@
 package com.cooksys.second_assessment.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Client {
@@ -20,18 +20,29 @@ public class Client {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private Credentials credentials;
 	@CreationTimestamp
 	@Column(updatable=false)
 	private Date dateOfAccountCreation;
-	private Profile profile;
 	private Boolean isActive = true;
+	
+	private Credentials credentials;
+	private Profile profile;
+//	@OneToMany(mappedBy="author")
+//	private List<Tweet> allTweets;
 	@ManyToMany
 	private List<Client> followedFeeds;
 	@ManyToMany(mappedBy="followedFeeds")
 	private List<Client> followers;
+	@ManyToMany
+	private List<Tweet> likedTweets;
 	
 
+//	public List<Tweet> getAllTweets() {
+//		return allTweets;
+//	}
+//	public void setAllTweets(List<Tweet> allTweets) {
+//		this.allTweets = allTweets;
+//	}
 	public Integer getId() {
 		return id;
 	}
@@ -62,7 +73,6 @@ public class Client {
 	public void setDateOfAccountCreation(Date dateOfAccountCreation) {
 		this.dateOfAccountCreation = dateOfAccountCreation;
 	}
-	
 	public List<Client> getFollowedFeeds() {
 		return followedFeeds;
 	}
@@ -75,6 +85,15 @@ public class Client {
 	public void setFollowers(List<Client> followers) {
 		this.followers = followers;
 	}
+	public List<Tweet> getLikedTweets() {
+		return likedTweets;
+	}
+	public void setLikedTweets(List<Tweet> likedTweets) {
+		this.likedTweets = likedTweets;
+	}	
+	
+	
+	
 	
 	@Override
 	public int hashCode() {
@@ -99,6 +118,7 @@ public class Client {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}
+
 
 }
