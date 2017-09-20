@@ -83,8 +83,12 @@ public class ClientService {
 	}
 
 	public void follow(String followedClient, ClientDto follower) {
-		Client client = clientRepository.findByCredentialsUsername(followedClient);
-		client.getFollowers().add(clientRepository.findByCredentialsUsername(follower.getCredentials().getUsername()));
+		Client followed = clientRepository.findByCredentialsUsername(followedClient);
+		Client following = clientRepository.findByCredentialsUsername(follower.getCredentials().getUsername());
+		followed.getFollowers().add(following);
+		following.getFollowedFeeds().add(followed);
+		clientRepository.save(followed);
+		clientRepository.save(following);
 	}
 	
 	public List<ClientDto> getFollowers(String username){
