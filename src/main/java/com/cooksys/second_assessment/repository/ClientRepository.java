@@ -13,4 +13,6 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 	Client findByCredentialsUsernameAndIsActiveTrue(String username);
 	
 	Client findByCredentialsUsername(String username);
+	
+	Client findByCredentialsUsernameAndIsActiveFalse(String username);
 }

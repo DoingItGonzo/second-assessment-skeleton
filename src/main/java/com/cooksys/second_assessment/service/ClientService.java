@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.mapper.ClientMapper;
 import com.cooksys.second_assessment.repository.ClientRepository;
@@ -20,12 +21,23 @@ public class ClientService {
 		this.clientMapper = clientMapper;
 	}
 
-	public Client createClient(Client client) {
-		return clientRepository.save(client);
+	//Overwrites existing fields with contents of new object. Is that what we want?
+	public ClientDto createClient(ClientDto clientDto) {
+
+		Client client = clientRepository.findByCredentialsUsername(clientDto.getCredentials().getUsername());
+		if (client != null) {
+			if (!client.getIsActive()) {
+				client.setIsActive(true);
+				return clientMapper.toDto(clientRepository.save(client));
+			} else
+				return null;
+		} else {
+			return clientMapper.toDto(clientRepository.save(clientMapper.fromDto(clientDto)));
+		}
 	}
 
-	public List<Client> getAll() {
-		return clientRepository.findByIsActiveTrue();
+	public List<ClientDto> getAll() {
+		return clientMapper.fromClientList(clientRepository.findByIsActiveTrue());
 	}
 
 	public Boolean getClientExists(String username) {
@@ -36,23 +48,27 @@ public class ClientService {
 		return (clientRepository.findByCredentialsUsername(username) == null) ? true: false;
 	}
 
-	public Client getClient(String username) {
-		return (clientRepository.findByCredentialsUsernameAndIsActiveTrue(username));
+	public ClientDto getClient(String username) {
+		return clientMapper.toDto(clientRepository.findByCredentialsUsernameAndIsActiveTrue(username));
 	}
 
 	//ERROR
 	//MOTHAH FUCKIN'
 	//HANDLING
-	public Client patchClient(String username, Client clientDto) {
+	public ClientDto patchClient(String username, ClientDto clientDto) {
 		Client client = clientRepository.findByCredentialsUsername(username);
 		client.setProfile(clientDto.getProfile());
-		return clientRepository.save(client);
+		client.getCredentials().setPassword(clientDto.getCredentials().getPassword());
+		return clientMapper.toDto(clientRepository.save(client));
 	}
 
-	public Client deleteClient(String username) {
+	public ClientDto deleteClient(String username) {
 		Client client = clientRepository.findByCredentialsUsername(username);
-		client.setIsActive(false);
-		return clientRepository.save(client);
+		if (client == null) 
+			return null;
+		else 
+			client.setIsActive(false);
+			return clientMapper.toDto(clientRepository.save(client));
 
 	}
 

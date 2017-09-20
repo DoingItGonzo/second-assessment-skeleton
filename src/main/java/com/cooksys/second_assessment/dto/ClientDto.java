@@ -1,29 +1,29 @@
 package com.cooksys.second_assessment.dto;
 
-
+import com.cooksys.second_assessment.entity.Credentials;
+import com.cooksys.second_assessment.entity.Profile;
 
 public class ClientDto {
-	private Integer id;
 	
-	private String email;
+	private Credentials credentials;
+	private Profile profile;
 
-	public Integer getId() {
-		return id;
+	public Profile getProfile() {
+		return profile;
 	}
 
-	public String getEmail() {
-		return email;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Credentials getCredentials() {
+		return credentials;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setCredentials(Credentials credentials) {
+		this.credentials = credentials;
 	}
 
-	
 
 }
 

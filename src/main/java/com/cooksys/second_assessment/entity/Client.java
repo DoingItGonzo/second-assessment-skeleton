@@ -2,6 +2,7 @@ package com.cooksys.second_assessment.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,13 +13,10 @@ public class Client {
 	@Id
 	@GeneratedValue
 	private Integer id;
+	@Column(nullable = false)
 	private Credentials credentials;	
 	private Profile profile;
 	private Boolean isActive = true;
-//	@ManyToMany(mappedBy="followers")
-//	private List<Client> following;
-//	@ManyToMany
-//	private List<Client> followers;
 
 	public Integer getId() {
 		return id;
