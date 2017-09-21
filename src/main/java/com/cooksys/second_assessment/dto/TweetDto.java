@@ -9,6 +9,7 @@ public class TweetDto {
 	private Credentials credentials;
 	private String content;
 	
+
 	public Credentials getCredentials() {
 		return credentials;
 	}

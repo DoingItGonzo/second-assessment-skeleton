@@ -34,7 +34,7 @@ public class Tweet {
 	private List<HashTag> hashTags = new ArrayList<>();;
 	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
-	private List<Client> clientsWhoLiked;
+	private List<Client> clientsWhoLiked= new ArrayList<>();
 	@OneToMany(mappedBy="parentTweet")
 	private List<Tweet> childTweets = new ArrayList<>();
 	@ManyToOne

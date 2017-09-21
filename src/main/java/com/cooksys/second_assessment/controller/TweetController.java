@@ -26,6 +26,10 @@ public class TweetController {
 		this.tweetService = tweetService;
 	}
 	
+	@GetMapping
+	public List<TweetDto> getAllTweets(){
+		return tweetService.getAllTweets();
+	}
 	@GetMapping("tweets/{id}")
 	public TweetDto getTweet(@PathVariable Integer id){
 		return tweetService.getTweet(id);
@@ -65,7 +69,7 @@ public class TweetController {
 	///////////////////////////////////Tag Methods////////////////////////////////////////////////////////
 	@GetMapping("tags/{label}")
 	public List<HashTagDto> getTagsByLabel(@PathVariable String label){
-		return tweetService.getTagsByLabel(label);
+		return tweetService.getTagByLabel(label);
 	}
 	@GetMapping("tags")
 	public List<HashTagDto> getAllTags() {

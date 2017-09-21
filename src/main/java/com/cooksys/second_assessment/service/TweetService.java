@@ -1,20 +1,21 @@
 package com.cooksys.second_assessment.service;
 
 import java.util.ArrayList;
-
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.dto.HashTagDto;
-import com.cooksys.second_assessment.mapper.TweetMapper;
 import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.entity.HashTag;
 import com.cooksys.second_assessment.entity.Tweet;
 import com.cooksys.second_assessment.mapper.ClientMapper;
 import com.cooksys.second_assessment.mapper.HashTagMapper;
+import com.cooksys.second_assessment.mapper.TweetMapper;
 import com.cooksys.second_assessment.repository.ClientRepository;
 import com.cooksys.second_assessment.repository.HashTagRepository;
 import com.cooksys.second_assessment.repository.TweetRepository;
@@ -40,6 +41,9 @@ public class TweetService {
 		this.hashTagMapper = hashTagMapper;
 	}
 
+	public List<TweetDto> getAllTweets() {
+		return tweetMapper.fromTweetList(tweetRepository.findAll());
+	}
 	public TweetDto getTweet(Integer id) {
 		return tweetMapper.toDto(tweetRepository.findOneById(id));
 	}
@@ -128,24 +132,28 @@ public class TweetService {
 		return hashTagMapper.fromHashTagList(hashTagRepository.findAll());
 	}
 
-	public List<HashTagDto> getTagsByLabel(String label) {
+	public List<HashTagDto> getTagByLabel(String label) {
 		return hashTagMapper.fromHashTagList(hashTagRepository.findByLabelAndIsActiveTrue(label));
 	}
 
+	@Transactional
 	public TweetDto replyTweet(Integer id, TweetDto tweetDto) {
 		Tweet oldTweet = tweetRepository.findOneById(id);
-		Tweet newTweet = tweetMapper.fromDto(tweetDto);
-		tweetRepository.save(newTweet);
 		if (oldTweet == null || 
 		!clientService.getClientExists(tweetDto.getCredentials().getUsername()) ||
 		tweetDto.getContent() == null)
 			return null;
 		
 		else {
+		postTweet(tweetDto);
+		Tweet newTweet = tweetRepository.findTopByCredentialsUsernameOrderByIdDesc(tweetDto.getCredentials().getUsername());
 		oldTweet.getChildTweets().add(newTweet);
+		tweetRepository.save(oldTweet);
 		newTweet.setParentTweet(oldTweet);
-		return tweetMapper.toDto(tweetRepository.save(newTweet));
+		return tweetMapper.toDto(newTweet);
 	}
 
 }
+
+
 }
