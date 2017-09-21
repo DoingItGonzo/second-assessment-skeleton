@@ -20,7 +20,8 @@ public class Tweet {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private Credentials credentials;
-//	private Client author;
+	@ManyToOne
+	private Client author;
 	@CreationTimestamp
 	@Column(updatable=false)
 	private Date posted;
@@ -32,13 +33,13 @@ public class Tweet {
 	
 	
 	
-//	public Client getAuthor() {
-//		return author;
-//	}
-//
-//	public void setAuthor(Client author) {
-//		this.author = author;
-//	}
+	public Client getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(Client author) {
+		this.author = author;
+	}
 
 	public List<Client> getClientsWhoLiked() {
 		return clientsWhoLiked;

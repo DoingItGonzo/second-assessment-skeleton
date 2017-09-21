@@ -6,6 +6,8 @@ import com.cooksys.second_assessment.entity.Tweet;
 
 public interface TweetRepository extends JpaRepository<Tweet, Integer>{
 	
+	Tweet findByCredentialsUsername(String username);
+	
 	Tweet findOneById(Integer id);
 
 }

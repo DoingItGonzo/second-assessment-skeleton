@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.second_assessment.dto.ClientDto;
+import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.service.ClientService;
 
 @RestController
@@ -55,6 +56,10 @@ public class ClientController {
 		return clientService.getFollowers(username);
 	}
 	
+	@GetMapping("users/@{username}/tweets")
+	public List<TweetDto> getClientTweets(@PathVariable String username) {
+		return clientService.getClientTweets(username);
+	}
 	
 	@PostMapping
 	public ClientDto createClient(@RequestBody ClientDto clientDto, HttpServletResponse response) {

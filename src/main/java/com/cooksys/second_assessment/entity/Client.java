@@ -28,8 +28,8 @@ public class Client {
 	
 	private Credentials credentials;
 	private Profile profile;
-//	@OneToMany(mappedBy="author")
-//	private List<Tweet> allTweets;
+	@OneToMany(mappedBy="author")
+	private List<Tweet> allTweets;
 	@ManyToMany
 	private List<Client> followedFeeds;
 	@ManyToMany(mappedBy="followedFeeds")
@@ -38,12 +38,12 @@ public class Client {
 	private List<Tweet> likedTweets;
 	
 
-//	public List<Tweet> getAllTweets() {
-//		return allTweets;
-//	}
-//	public void setAllTweets(List<Tweet> allTweets) {
-//		this.allTweets = allTweets;
-//	}
+	public List<Tweet> getAllTweets() {
+		return allTweets;
+	}
+	public void setAllTweets(List<Tweet> allTweets) {
+		this.allTweets = allTweets;
+	}
 	public Integer getId() {
 		return id;
 	}

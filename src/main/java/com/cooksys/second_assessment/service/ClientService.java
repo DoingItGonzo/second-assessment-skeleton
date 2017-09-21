@@ -7,32 +7,25 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+
+import com.cooksys.second_assessment.controller.Tweet;
 import com.cooksys.second_assessment.dto.ClientDto;
+import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.mapper.ClientMapper;
 import com.cooksys.second_assessment.repository.ClientRepository;
 
 @Service
 public class ClientService {
-	//
-	//
-	//
-	//
-	/// @creationTimestamp
-	// @Make them impossible to update
-	//
-	// Test controllers for default reesponse codes
-	// 
-	//
-	//
-	//
-	//
+
 	private ClientMapper clientMapper;
 	private ClientRepository clientRepository;
+	private TweetMapper tweetMapper;
 	
-	public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
+	public ClientService(ClientRepository clientRepository, ClientMapper clientMapper, TweetMapper tweetMapper) {
 		this.clientRepository = clientRepository;
 		this.clientMapper = clientMapper;
+		this.tweetMapper = tweetMapper;
 	}
 
 	public ClientDto createClient(ClientDto clientDto) {
@@ -94,6 +87,11 @@ public class ClientService {
 	public List<ClientDto> getFollowers(String username){
 		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowers());
 
+	}
+
+	public List<TweetDto> getClientTweets(String username) {
+		Client client = clientRepository.findByCredentialsUsername(username);
+		return tweetMapper.g;
 	}
 
 }

@@ -26,7 +26,6 @@ public class TweetController {
 		this.tweetService = tweetService;
 	}
 	
-	
 	@GetMapping("tweets/{id}")
 	public TweetDto getTweet(@PathVariable Integer id){
 		return tweetService.getTweet(id);
@@ -45,6 +44,11 @@ public class TweetController {
 	@PostMapping
 	public TweetDto postTweet(@RequestBody TweetDto tweetDto){
 		return tweetService.postTweet(tweetDto);
+	}
+	
+	@PostMapping("tweets/{id}/like")
+	public void likeTweet(@PathVariable Integer id, @RequestBody TweetDto tweetDto) {
+		tweetService.likeTweet(id, tweetDto);
 	}
 	
 	@DeleteMapping("tweets/{id}")
