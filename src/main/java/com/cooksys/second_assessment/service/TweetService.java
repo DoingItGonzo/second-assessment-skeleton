@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.transaction.Transactional;
 
@@ -179,9 +180,14 @@ public class TweetService {
 
 	public List<TweetDto> getContext(Integer id) {
 		Tweet tweet = tweetRepository.findOneById(id);
-		while(tweet.getParentTweet() != null){
-			context.add(tweet);
-			tweet = tweet.getParentTweet();
+		context.add(tweet);
+		if (tweet.getParentTweet() != null){
+			Tweet parentTweet = tweet.getParentTweet();
+			while(parentTweet != null){
+				if (!context.contains(parentTweet))
+					context.add(parentTweet);
+				parentTweet = parentTweet.getParentTweet();
+			}
 		}
 		if(tweet.getChildTweets() != null) {
 			childTweetTree(tweet.getChildTweets());
@@ -195,19 +201,17 @@ public class TweetService {
 		});
 		List<TweetDto> contextDto = tweetMapper.fromTweetList(context);
 		context.clear();
-		/////////////SORT THAT SHIT
 		return contextDto;
 	}
 	public void childTweetTree(List<Tweet> children){
 
 		for(Tweet tweet: children) {
-			context.add(tweet);
+			if (!context.contains(tweet))
+				context.add(tweet);
 			if(tweet.getChildTweets() == null)
 				return;
 			else 
 				childTweetTree(tweet.getChildTweets());
 		} return;
 	}
-
-
 }
