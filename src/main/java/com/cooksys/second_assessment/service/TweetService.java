@@ -132,4 +132,20 @@ public class TweetService {
 		return hashTagMapper.fromHashTagList(hashTagRepository.findByLabelAndIsActiveTrue(label));
 	}
 
+	public TweetDto replyTweet(Integer id, TweetDto tweetDto) {
+		Tweet oldTweet = tweetRepository.findOneById(id);
+		Tweet newTweet = tweetMapper.fromDto(tweetDto);
+		tweetRepository.save(newTweet);
+		if (oldTweet == null || 
+		!clientService.getClientExists(tweetDto.getCredentials().getUsername()) ||
+		tweetDto.getContent() == null)
+			return null;
+		
+		else {
+		oldTweet.getChildTweets().add(newTweet);
+		newTweet.setParentTweet(oldTweet);
+		return tweetMapper.toDto(tweetRepository.save(newTweet));
+	}
+
+}
 }

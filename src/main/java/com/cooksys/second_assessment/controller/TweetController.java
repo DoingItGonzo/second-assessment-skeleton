@@ -51,6 +51,11 @@ public class TweetController {
 		tweetService.likeTweet(id, tweetDto);
 	}
 	
+	@PostMapping("tweets/{id}/reply")
+	public TweetDto replyTweet(@PathVariable Integer id, @RequestBody TweetDto tweetDto){
+		return tweetService.replyTweet(id, tweetDto);
+	}
+	
 	@DeleteMapping("tweets/{id}")
 	public TweetDto deleteTweet(@PathVariable Integer id) {
 		return tweetService.deleteTweet(id);

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -34,9 +35,26 @@ public class Tweet {
 	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
 	private List<Client> clientsWhoLiked;
+	@OneToMany(mappedBy="parentTweet")
+	private List<Tweet> childTweets = new ArrayList<>();
+	@ManyToOne
+	private Tweet parentTweet;
 	
 	
 	
+
+	public List<Tweet> getChildTweets() {
+		return childTweets;
+	}
+	public Tweet getParentTweet() {
+		return parentTweet;
+	}
+	public void setChildTweets(List<Tweet> childTweets) {
+		this.childTweets = childTweets;
+	}
+	public void setParentTweet(Tweet parentTweet) {
+		this.parentTweet = parentTweet;
+	}
 	public List<HashTag> getHashTags() {
 		return hashTags;
 	}
