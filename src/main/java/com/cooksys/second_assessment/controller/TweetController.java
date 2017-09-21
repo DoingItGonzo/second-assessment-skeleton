@@ -31,11 +31,6 @@ public class TweetController {
 		return tweetService.getTweet(id);
 	}
 	
-	@GetMapping("tweets/{id}/tags")
-	public HashTagDto getHashTag(@PathVariable Integer id){
-		return tweetService.getHashTag(id);
-	}
-	
 	@GetMapping("tweets/{id}/likes")
 	public List<ClientDto> getClientsWhoLiked(@PathVariable Integer id){
 		return tweetService.getClientsWhoLiked(id);
@@ -44,11 +39,6 @@ public class TweetController {
 	@GetMapping("tweets/{id}/mentions")
 	public List<ClientDto> getMentionsInTweet(@PathVariable Integer id) {
 		return tweetService.getMentionsInTweet(id);
-	}
-	
-	@GetMapping("validate/tag/exists/{label}") 
-	public Boolean hashTagExists(@PathVariable String label) {
-		return tweetService.hashTagExists(label);
 	}
 	
 	@PostMapping
@@ -64,6 +54,25 @@ public class TweetController {
 	@DeleteMapping("tweets/{id}")
 	public TweetDto deleteTweet(@PathVariable Integer id) {
 		return tweetService.deleteTweet(id);
+	}
+	
+	
+	///////////////////////////////////Tag Methods////////////////////////////////////////////////////////
+	@GetMapping("tags/{label}")
+	public List<HashTagDto> getTagsByLabel(@PathVariable String label){
+		return tweetService.getTagsByLabel(label);
+	}
+	@GetMapping("tags")
+	public List<HashTagDto> getAllTags() {
+		return tweetService.getAllTags();
+	}
+	@GetMapping("validate/tag/exists/{label}") 
+	public Boolean hashTagExists(@PathVariable String label) {
+		return tweetService.hashTagExists(label);
+	}
+	@GetMapping("tweets/{id}/tags")
+	public List<HashTagDto> getTagFromTweet(@PathVariable Integer id){
+		return tweetService.getTagFromTweet(id);
 	}
 
 }

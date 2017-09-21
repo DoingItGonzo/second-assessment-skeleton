@@ -1,18 +1,20 @@
 package com.cooksys.second_assessment.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.dto.HashTagDto;
+import com.cooksys.second_assessment.mapper.TweetMapper;
 import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.entity.HashTag;
 import com.cooksys.second_assessment.entity.Tweet;
 import com.cooksys.second_assessment.mapper.ClientMapper;
-import com.cooksys.second_assessment.mapper.TweetMapper;
+import com.cooksys.second_assessment.mapper.HashTagMapper;
 import com.cooksys.second_assessment.repository.ClientRepository;
 import com.cooksys.second_assessment.repository.HashTagRepository;
 import com.cooksys.second_assessment.repository.TweetRepository;
@@ -26,14 +28,16 @@ public class TweetService {
 	private TweetMapper tweetMapper;
 	private ClientService clientService;
 	private HashTagRepository hashTagRepository;
+	private HashTagMapper hashTagMapper;
 	
-	public TweetService(TweetRepository tweetRepository, HashTagRepository hashTagRepository, ClientMapper clientMapper, TweetMapper tweetMapper, ClientRepository clientRepository, ClientService clientService) {
+	public TweetService(HashTagMapper hashTagMapper, TweetRepository tweetRepository, HashTagRepository hashTagRepository, ClientMapper clientMapper, TweetMapper tweetMapper, ClientRepository clientRepository, ClientService clientService) {
 		this.tweetRepository = tweetRepository;
 		this.clientMapper = clientMapper;
 		this.tweetMapper = tweetMapper;
 		this.clientRepository = clientRepository;
 		this.clientService = clientService;
 		this.hashTagRepository = hashTagRepository;
+		this.hashTagMapper = hashTagMapper;
 	}
 
 	public TweetDto getTweet(Integer id) {
@@ -47,14 +51,11 @@ public class TweetService {
 		return tweetMapper.toDto(tweetRepository.save(tweet));
 	}
 
-	public HashTagDto getHashTag(Integer id) {
-//		return hashTagMapper.toDto(tweetRepository.findOneById(id).getHashTag());
-		return null;
-	}
-
 	public List<ClientDto> getClientsWhoLiked(Integer id) {
 		return clientMapper.fromClientList(tweetRepository.findOneById(id).getClientsWhoLiked());
 	}
+
+
 
 	public TweetDto postTweet(TweetDto tweetDto) {
 		Client client = clientRepository.findByCredentialsUsername(tweetDto.getCredentials().getUsername());
@@ -63,6 +64,7 @@ public class TweetService {
 		}
 		Tweet tweet = new Tweet();
 		List<Client> mentionedList = new ArrayList<>();
+		List<HashTag> tagsInTweet = new ArrayList<>();
 		tweetRepository.save(tweet);
 		if(tweetDto.getContent() != null) {
 			String[] splitContent = tweetDto.getContent().split(" ");
@@ -73,26 +75,23 @@ public class TweetService {
 					clientRepository.save(mentionedClient);
 					mentionedList.add(mentionedClient);
 				}
-/////////////////////////////////////////////////////				
-				//Won't do shit while the object is still transient. 
-				//It's adding the HashTag to the DataBase but not establishing the relation.
-				// Probably need to instantiate it outside the if block. Might be worth splitting this . . . 
-				// . . . shit into multiple methods
-				
-//				if (word.startsWith("#")) {
-//					HashTag hashTag = new HashTag();
-//					hashTag.setLabel(word.substring(1));
-//					hashTagRepository.save(hashTag);
-				
-				//It breaks right here!!!!
-//					hashTagRepository.findByLabel(word.substring(1)).getTweetsWithHashTag().add(tweet);
-////					hashTag.getTweetsWithHashTag().add(tweet);
-				
-//					hashTagRepository.save(hashTagRepository.findByLabel(word.substring(1)));
-//					tweet.getHashTags().add(hashTag);
-//				}
+				if (word.startsWith("#")) {
+					if(!hashTagExists(word.substring(1))) {
+						HashTag hashTag = new HashTag();
+						hashTag.setLabel(word.substring(1));
+						tagsInTweet.add(hashTag);
+						hashTagRepository.save(hashTag);
+					} else{
+						tagsInTweet.add(hashTagRepository.findByLabel(word.substring(1)));
+					}
+				}
 			}
-		} 
+		}
+		for(HashTag tag: tagsInTweet){
+			tag.getTweetsWithHashTag().add(tweet);
+			hashTagRepository.save(tag);
+			tweet.getHashTags().add(tag);
+		}
 		tweet.setContent(tweetDto.getContent()); tweet.setCredentials(tweetDto.getCredentials());
 		tweet.setAuthor(client);
 		tweet.setMentions(mentionedList);
@@ -114,11 +113,23 @@ public class TweetService {
 		return clientMapper.fromClientList(tweetRepository.findOneById(id).getMentions());
 	}
 
+	
+	
+	public List<HashTagDto> getTagFromTweet(Integer id) {
+		return hashTagMapper.fromHashTagList(tweetRepository.findOneById(id).getHashTags());
+	}
 	public Boolean hashTagExists(String label) {
 		if (hashTagRepository.findByLabel(label) != null)
 			return true;
 		else
 			return false;
+	}
+	public List<HashTagDto> getAllTags() {
+		return hashTagMapper.fromHashTagList(hashTagRepository.findAll());
+	}
+
+	public List<HashTagDto> getTagsByLabel(String label) {
+		return hashTagMapper.fromHashTagList(hashTagRepository.findByLabelAndIsActiveTrue(label));
 	}
 
 }

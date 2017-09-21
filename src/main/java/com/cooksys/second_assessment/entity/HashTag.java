@@ -1,5 +1,6 @@
 package com.cooksys.second_assessment.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class HashTag {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	@Column(nullable = false)
+	@Column(nullable = false, unique=true)
 	private String label;
 	@CreationTimestamp
 	@Column(updatable=false)
@@ -28,7 +29,8 @@ public class HashTag {
 	@UpdateTimestamp
 	private Date lastUsed;
 	@ManyToMany(mappedBy="hashTags")
-	private List<Tweet> tweetsWithHashTag;
+	private List<Tweet> tweetsWithHashTag = new ArrayList<>();
+	private Boolean isActive=true;
 	
 	
 
@@ -53,26 +55,30 @@ public class HashTag {
 	public String getLabel() {
 		return label;
 	}
-	
 	public Date getFirstUsed() {
 		return firstUsed;
 	}
-	
 	public Date getLastUsed() {
 		return lastUsed;
 	}
-	
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
 	public void setFirstUsed(Date firstUsed) {
 		this.firstUsed = firstUsed;
 	}
-	
 	public void setLastUsed(Date lastUsed) {
 		this.lastUsed = lastUsed;
 	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

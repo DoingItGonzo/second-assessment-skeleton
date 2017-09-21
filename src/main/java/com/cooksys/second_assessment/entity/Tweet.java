@@ -1,5 +1,6 @@
 package com.cooksys.second_assessment.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Tweet {
 	@ManyToMany(mappedBy="mentionedBy")
 	private List<Client> mentions;
 	@ManyToMany
-	private List<HashTag> hashTags;
+	private List<HashTag> hashTags = new ArrayList<>();;
 	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
 	private List<Client> clientsWhoLiked;
@@ -39,27 +40,21 @@ public class Tweet {
 	public List<HashTag> getHashTags() {
 		return hashTags;
 	}
-
 	public void setHashTags(List<HashTag> hashTags) {
 		this.hashTags = hashTags;
 	}
-
 	public Client getAuthor() {
 		return author;
 	}
-
 	public void setAuthor(Client author) {
 		this.author = author;
 	}
-
 	public List<Client> getClientsWhoLiked() {
 		return clientsWhoLiked;
 	}
-
 	public void setClientsWhoLiked(List<Client> clientsWhoLiked) {
 		this.clientsWhoLiked = clientsWhoLiked;
 	}
-
 //	public HashTag getHashTag() {
 //		return hashTag;
 //	}
@@ -71,36 +66,30 @@ public class Tweet {
 	public Boolean getIsActive() {
 		return isActive;
 	}
-
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
 	public Integer getId() {
 		return id;
 	}
-
-	
 	public Date getPosted() { 
 		return posted;
 	}
-	
 	public String getContent() {
 		return content;
 	}
-	
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
 	public void setPosted(Date posted) {
 		this.posted = posted;
 	}
-	
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
