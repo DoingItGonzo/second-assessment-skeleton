@@ -51,11 +51,6 @@ public class ClientController {
 		return clientService.getClientAvailable(username);
 	}
 	
-	@GetMapping("users/@{username}/followers")
-	public List<ClientDto> getFollowers(@PathVariable String username) {
-		return clientService.getFollowers(username);
-	}
-	
 	@GetMapping("users/@{username}/tweets")
 	public List<TweetDto> getClientTweets(@PathVariable String username) {
 		return clientService.getClientTweets(username);
@@ -81,9 +76,21 @@ public class ClientController {
 	}
 	
 	//need a return for the HTTP status code
+	@GetMapping("users/@{username}/followers")
+	public List<ClientDto> getFollowers(@PathVariable String username) {
+		return clientService.getFollowers(username);
+	}
+	@GetMapping("users/@{username}/following")
+	public List<ClientDto> getFollowing(@PathVariable String username) {
+		return clientService.getFollowing(username);
+	}
 	@PostMapping("users/@{username}/follow")
 	public void follow(@PathVariable String username, @RequestBody ClientDto follower){
 		clientService.follow(username, follower);
+	}
+	@PostMapping("users/@{username}/unfollow")
+	public void unfollow(@PathVariable String username, @RequestBody ClientDto follower){
+		clientService.unfollow(username, follower);
 	}
 	
 	@PatchMapping("users/@{username}")

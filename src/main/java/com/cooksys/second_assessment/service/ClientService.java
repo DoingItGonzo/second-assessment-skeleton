@@ -19,7 +19,7 @@ public class ClientService {
 	private ClientMapper clientMapper;
 	private ClientRepository clientRepository;
 	private TweetMapper tweetMapper;
-	
+
 	public ClientService(ClientRepository clientRepository, ClientMapper clientMapper, TweetMapper tweetMapper) {
 		this.clientRepository = clientRepository;
 		this.clientMapper = clientMapper;
@@ -69,7 +69,7 @@ public class ClientService {
 			return null;
 		else 
 			client.setIsActive(false);
-			return clientMapper.toDto(clientRepository.save(client));
+		return clientMapper.toDto(clientRepository.save(client));
 
 	}
 
@@ -81,15 +81,23 @@ public class ClientService {
 		clientRepository.save(followed);
 		clientRepository.save(following);
 	}
-	
+	public void unfollow(String username, ClientDto follower) {
+		Client followed = clientRepository.findByCredentialsUsername(username);
+		Client following = clientRepository.findByCredentialsUsername(follower.getCredentials().getUsername());
+		followed.getFollowers().remove(following);
+		following.getFollowedFeeds().remove(followed);
+		clientRepository.save(followed);
+		clientRepository.save(following);
+	}
 	public List<ClientDto> getFollowers(String username){
 		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowers());
 	}
-	
 	public List<ClientDto> getFollowing(String username){
 		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowedFeeds());
 	}
 
+	
+	
 	public List<TweetDto> getClientTweets(String username) {
 		Client client = clientRepository.findByCredentialsUsername(username);
 		return tweetMapper.fromTweetList(client.getAllTweets());
