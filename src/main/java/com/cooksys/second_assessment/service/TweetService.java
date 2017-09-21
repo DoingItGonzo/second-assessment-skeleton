@@ -11,6 +11,7 @@ import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.dto.HashTagDto;
 import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
+import com.cooksys.second_assessment.entity.Credentials;
 import com.cooksys.second_assessment.entity.HashTag;
 import com.cooksys.second_assessment.entity.Tweet;
 import com.cooksys.second_assessment.mapper.ClientMapper;
@@ -151,9 +152,27 @@ public class TweetService {
 		tweetRepository.save(oldTweet);
 		newTweet.setParentTweet(oldTweet);
 		return tweetMapper.toDto(newTweet);
+		}
+	}
+	public List<TweetDto> getReplies(Integer id) {
+		return tweetMapper.fromTweetList(tweetRepository.findOneById(id).getChildTweets());
 	}
 
-}
+	public TweetDto repostTweet(Integer id, TweetDto tweetDto) {
+		Tweet repostTweet = new Tweet();
+		Tweet parentTweet = tweetRepository.findOneById(id);
+		repostTweet.setCredentials(tweetDto.getCredentials());
+		repostTweet.setContent(parentTweet.getContent());
+		repostTweet.setRepostParent(parentTweet);
+		tweetRepository.save(repostTweet);
+		parentTweet.getRepostChildren().add(repostTweet);
+		tweetRepository.save(parentTweet);
+		return tweetMapper.toDto(repostTweet);
+	}
+
+	public List<TweetDto> getReposts(Integer id) {
+		return tweetMapper.fromTweetList(tweetRepository.findOneById(id).getRepostChildren());
+	}
 
 
 }

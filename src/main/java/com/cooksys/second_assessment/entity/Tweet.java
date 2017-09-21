@@ -39,10 +39,26 @@ public class Tweet {
 	private List<Tweet> childTweets = new ArrayList<>();
 	@ManyToOne
 	private Tweet parentTweet;
+	@ManyToOne
+	private Tweet repostParent;
+	@OneToMany(mappedBy="repostParent")
+	private List<Tweet> repostChildren = new ArrayList<>();
 	
 	
 	
 
+	public Tweet getRepostParent() {
+		return repostParent;
+	}
+	public List<Tweet> getRepostChildren() {
+		return repostChildren;
+	}
+	public void setRepostParent(Tweet repostParent) {
+		this.repostParent = repostParent;
+	}
+	public void setRepostChildren(List<Tweet> repostChildren) {
+		this.repostChildren = repostChildren;
+	}
 	public List<Tweet> getChildTweets() {
 		return childTweets;
 	}

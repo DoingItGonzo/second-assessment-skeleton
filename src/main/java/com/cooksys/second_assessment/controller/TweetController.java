@@ -55,9 +55,24 @@ public class TweetController {
 		tweetService.likeTweet(id, tweetDto);
 	}
 	
+	
+	
+	@PostMapping("tweets/{id}/repost")
+	public TweetDto repostTweet(@PathVariable Integer id, @RequestBody TweetDto tweetDto) {
+		return tweetService.repostTweet(id, tweetDto);
+	}
+	@GetMapping("tweets/{id}/reposts")
+	public List<TweetDto> getReposts(@PathVariable Integer id) {
+		return tweetService.getReposts(id);
+	}
+	
 	@PostMapping("tweets/{id}/reply")
 	public TweetDto replyTweet(@PathVariable Integer id, @RequestBody TweetDto tweetDto){
 		return tweetService.replyTweet(id, tweetDto);
+	}
+	@GetMapping("tweets/{id}/replies")
+	public List<TweetDto> getReplies(@PathVariable Integer id){
+		return tweetService.getReplies(id);
 	}
 	
 	@DeleteMapping("tweets/{id}")
