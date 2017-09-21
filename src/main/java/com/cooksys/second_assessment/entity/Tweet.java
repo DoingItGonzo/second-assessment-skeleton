@@ -28,13 +28,22 @@ public class Tweet {
 	private String content;
 	@ManyToMany(mappedBy="mentionedBy")
 	private List<Client> mentions;
-//	private HashTag hashTag;
+	@ManyToMany
+	private List<HashTag> hashTags;
 	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
 	private List<Client> clientsWhoLiked;
 	
 	
 	
+	public List<HashTag> getHashTags() {
+		return hashTags;
+	}
+
+	public void setHashTags(List<HashTag> hashTags) {
+		this.hashTags = hashTags;
+	}
+
 	public Client getAuthor() {
 		return author;
 	}

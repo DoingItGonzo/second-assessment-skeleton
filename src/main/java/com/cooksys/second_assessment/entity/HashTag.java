@@ -1,13 +1,14 @@
 package com.cooksys.second_assessment.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,8 +27,23 @@ public class HashTag {
 	// @UpdateTimestamp is refreshed anytime the owning entity is updated
 	@UpdateTimestamp
 	private Date lastUsed;
+	@ManyToMany(mappedBy="hashTags")
+	private List<Tweet> tweetsWithHashTag;
+	
 	
 
+	public Integer getId() {
+		return id;
+	}
+	public List<Tweet> getTweetsWithHashTag() {
+		return tweetsWithHashTag;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public void setTweetsWithHashTag(List<Tweet> tweetsWithHashTag) {
+		this.tweetsWithHashTag = tweetsWithHashTag;
+	}
 	public Integer getid() {
 		return id;
 	}

@@ -46,10 +46,10 @@ public class TweetController {
 		return tweetService.getMentionsInTweet(id);
 	}
 	
-//	@GetMapping("validate/tag/exists/{label}") 
-//	public Boolean hashTagExists(@PathVariable String label) {
-//		return tweetService.hashTagExists(label);
-//	}
+	@GetMapping("validate/tag/exists/{label}") 
+	public Boolean hashTagExists(@PathVariable String label) {
+		return tweetService.hashTagExists(label);
+	}
 	
 	@PostMapping
 	public TweetDto postTweet(@RequestBody TweetDto tweetDto){

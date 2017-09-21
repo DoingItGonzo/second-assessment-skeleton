@@ -67,7 +67,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("users/@{username}/mentions")
-	public List<Tweet> getMentionsOfClient(@PathVariable String username) {
+	public List<TweetDto> getMentionsOfClient(@PathVariable String username) {
 		return clientService.getMentionsOfClient(username);
 	}
 	
