@@ -41,6 +41,16 @@ public class TweetController {
 		return tweetService.getClientsWhoLiked(id);
 	}
 	
+	@GetMapping("tweets/{id}/mentions")
+	public List<ClientDto> getMentionsInTweet(@PathVariable Integer id) {
+		return tweetService.getMentionsInTweet(id);
+	}
+	
+//	@GetMapping("validate/tag/exists/{label}") 
+//	public Boolean hashTagExists(@PathVariable String label) {
+//		return tweetService.hashTagExists(label);
+//	}
+	
 	@PostMapping
 	public TweetDto postTweet(@RequestBody TweetDto tweetDto){
 		return tweetService.postTweet(tweetDto);

@@ -26,6 +26,8 @@ public class Tweet {
 	@Column(updatable=false)
 	private Date posted;
 	private String content;
+	@ManyToMany(mappedBy="mentionedBy")
+	private List<Client> mentions;
 //	private HashTag hashTag;
 	private Boolean isActive = true;
 	@ManyToMany(mappedBy="likedTweets")
@@ -121,6 +123,14 @@ public class Tweet {
 
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
+	}
+
+	public List<Client> getMentions() {
+		return mentions;
+	}
+
+	public void setMentions(List<Client> mentions) {
+		this.mentions = mentions;
 	}
 	
 	

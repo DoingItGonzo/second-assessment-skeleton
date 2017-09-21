@@ -1,5 +1,6 @@
 package com.cooksys.second_assessment.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -57,8 +58,22 @@ public class TweetService {
 			return null;
 		}
 		Tweet tweet = new Tweet();
+		List<Client> mentionedList = new ArrayList<>();
+		tweetRepository.save(tweet);
+		if(tweetDto.getContent() != null) {
+			String[] splitContent = tweetDto.getContent().split(" ");
+			for(String word: splitContent) {
+				if (word.startsWith("@")) {
+					Client mentionedClient = clientRepository.findByCredentialsUsername(word.substring(1));
+					mentionedClient.getMentionedBy().add(tweet);
+					clientRepository.save(mentionedClient);
+					mentionedList.add(mentionedClient);
+				}
+			}
+		}
 		tweet.setContent(tweetDto.getContent()); tweet.setCredentials(tweetDto.getCredentials());
 		tweet.setAuthor(client);
+		tweet.setMentions(mentionedList);
 		client.getAllTweets().add(tweet);
 		clientRepository.save(client);
 		return tweetMapper.toDto(tweetRepository.save(tweet));
@@ -72,5 +87,14 @@ public class TweetService {
 		tweetRepository.save(tweet);
 		clientRepository.save(client);
 	}
+
+	public List<ClientDto> getMentionsInTweet(Integer id) {
+		return clientMapper.fromClientList(tweetRepository.findOneById(id).getMentions());
+	}
+
+//	public Boolean hashTagExists(String label) {
+//		
+//		return null;
+//	}
 
 }

@@ -66,6 +66,11 @@ public class ClientController {
 		return clientService.getFeed(username);
 	}
 	
+	@GetMapping("users/@{username}/mentions")
+	public List<Tweet> getMentionsOfClient(@PathVariable String username) {
+		return clientService.getMentionsOfClient(username);
+	}
+	
 	@PostMapping
 	public ClientDto createClient(@RequestBody ClientDto clientDto, HttpServletResponse response) {
 		ClientDto dto = clientService.createClient(clientDto);

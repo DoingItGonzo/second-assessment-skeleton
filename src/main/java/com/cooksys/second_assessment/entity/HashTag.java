@@ -21,7 +21,7 @@ public class HashTag {
 	@Column(nullable = false)
 	private String label;
 	@CreationTimestamp
-	@Column(nullable=false)
+	@Column(updatable=false)
 	private Date firstUsed;
 	// @UpdateTimestamp is refreshed anytime the owning entity is updated
 	@UpdateTimestamp

@@ -25,9 +25,10 @@ public class Client {
 	@Column(updatable=false)
 	private Date dateOfAccountCreation;
 	private Boolean isActive = true;
-	
 	private Credentials credentials;
 	private Profile profile;
+	@ManyToMany
+	private List<Tweet> mentionedBy;
 	@OneToMany(mappedBy="author")
 	private List<Tweet> allTweets;
 	@ManyToMany
@@ -38,6 +39,12 @@ public class Client {
 	private List<Tweet> likedTweets;
 	
 
+	public List<Tweet> getMentionedBy() {
+		return mentionedBy;
+	}
+	public void setMentionedBy(List<Tweet> mentionedBy) {
+		this.mentionedBy = mentionedBy;
+	}
 	public List<Tweet> getAllTweets() {
 		return allTweets;
 	}

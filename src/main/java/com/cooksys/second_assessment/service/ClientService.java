@@ -84,7 +84,10 @@ public class ClientService {
 	
 	public List<ClientDto> getFollowers(String username){
 		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowers());
-
+	}
+	
+	public List<ClientDto> getFollowing(String username){
+		return clientMapper.fromClientList(clientRepository.findByCredentialsUsername(username).getFollowedFeeds());
 	}
 
 	public List<TweetDto> getClientTweets(String username) {
@@ -100,6 +103,11 @@ public class ClientService {
 			feed.addAll(getClientTweets(clients.getCredentials().getUsername()));
 		}
 		return feed;
+	}
+
+	public List<TweetDto> getMentionsOfClient(String username) {
+		return tweetMapper.fromTweetList(clientRepository.findByCredentialsUsername(username).getMentionedBy());
+
 	}
 
 }
