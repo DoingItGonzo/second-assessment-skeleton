@@ -1,6 +1,8 @@
 package com.cooksys.second_assessment.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,7 +13,6 @@ import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.dto.HashTagDto;
 import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
-import com.cooksys.second_assessment.entity.Credentials;
 import com.cooksys.second_assessment.entity.HashTag;
 import com.cooksys.second_assessment.entity.Tweet;
 import com.cooksys.second_assessment.mapper.ClientMapper;
@@ -23,6 +24,8 @@ import com.cooksys.second_assessment.repository.TweetRepository;
 
 @Service
 public class TweetService {
+	
+	private List<Tweet> context = new ArrayList<>();
 	
 	private ClientRepository clientRepository;
 	private ClientMapper clientMapper;
@@ -172,6 +175,38 @@ public class TweetService {
 
 	public List<TweetDto> getReposts(Integer id) {
 		return tweetMapper.fromTweetList(tweetRepository.findOneById(id).getRepostChildren());
+	}
+
+	public List<TweetDto> getContext(Integer id) {
+		Tweet tweet = tweetRepository.findOneById(id);
+		while(tweet.getParentTweet() != null){
+			context.add(tweet);
+			tweet = tweet.getParentTweet();
+		}
+		if(tweet.getChildTweets() != null) {
+			childTweetTree(tweet.getChildTweets());
+		}
+		Collections.sort(context, new Comparator<Tweet>(){
+			public int compare(Tweet o1, Tweet o2){
+				if(o1.getId().equals(o2.getId()))
+					return 0;
+				return o1.getId() < o2.getId() ? -1 : 1;
+			}
+		});
+		List<TweetDto> contextDto = tweetMapper.fromTweetList(context);
+		context.clear();
+		/////////////SORT THAT SHIT
+		return contextDto;
+	}
+	public void childTweetTree(List<Tweet> children){
+
+		for(Tweet tweet: children) {
+			context.add(tweet);
+			if(tweet.getChildTweets() == null)
+				return;
+			else 
+				childTweetTree(tweet.getChildTweets());
+		} return;
 	}
 
 

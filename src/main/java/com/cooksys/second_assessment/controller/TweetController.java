@@ -26,6 +26,11 @@ public class TweetController {
 		this.tweetService = tweetService;
 	}
 	
+	@GetMapping("tweets/{id}/context")
+	public List<TweetDto> getContext(@PathVariable Integer id){
+		return tweetService.getContext(id);
+	}
+	
 	@GetMapping
 	public List<TweetDto> getAllTweets(){
 		return tweetService.getAllTweets();
