@@ -1,18 +1,16 @@
 package com.cooksys.second_assessment.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.cooksys.second_assessment.controller.Tweet;
 import com.cooksys.second_assessment.dto.ClientDto;
 import com.cooksys.second_assessment.dto.TweetDto;
 import com.cooksys.second_assessment.entity.Client;
 import com.cooksys.second_assessment.mapper.ClientMapper;
+import com.cooksys.second_assessment.mapper.TweetMapper;
 import com.cooksys.second_assessment.repository.ClientRepository;
 
 @Service
@@ -91,7 +89,17 @@ public class ClientService {
 
 	public List<TweetDto> getClientTweets(String username) {
 		Client client = clientRepository.findByCredentialsUsername(username);
-		return tweetMapper.g;
+		return tweetMapper.fromTweetList(client.getAllTweets());
+	}
+
+	public List<TweetDto> getFeed(String username) {
+		Client client = clientRepository.findByCredentialsUsername(username);
+		List<TweetDto> feed = new ArrayList<TweetDto>();
+		feed.addAll(getClientTweets(username));
+		for(Client clients: client.getFollowedFeeds()){
+			feed.addAll(getClientTweets(clients.getCredentials().getUsername()));
+		}
+		return feed;
 	}
 
 }
