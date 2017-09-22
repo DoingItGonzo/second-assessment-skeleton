@@ -27,7 +27,7 @@ public class ClientService {
 	}
 
 	public ClientDto createClient(ClientDto clientDto) {
-
+		
 		Client client = clientRepository.findByCredentialsUsername(clientDto.getCredentials().getUsername());
 		if (client != null) {
 			if (!client.getIsActive()) {

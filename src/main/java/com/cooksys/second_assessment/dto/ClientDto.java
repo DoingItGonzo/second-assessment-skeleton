@@ -7,6 +7,8 @@ public class ClientDto {
 	
 	private Credentials credentials;
 	private Profile profile;
+//	private Timestamp timestamp;
+//	private Long timestamp;
 
 	public Profile getProfile() {
 		return profile;

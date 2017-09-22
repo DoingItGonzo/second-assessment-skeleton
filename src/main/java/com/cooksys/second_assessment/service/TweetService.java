@@ -25,9 +25,9 @@ import com.cooksys.second_assessment.repository.TweetRepository;
 
 @Service
 public class TweetService {
-	
+
 	private List<Tweet> context = new ArrayList<>();
-	
+
 	private ClientRepository clientRepository;
 	private ClientMapper clientMapper;
 	private TweetRepository tweetRepository;
@@ -35,7 +35,7 @@ public class TweetService {
 	private ClientService clientService;
 	private HashTagRepository hashTagRepository;
 	private HashTagMapper hashTagMapper;
-	
+
 	public TweetService(HashTagMapper hashTagMapper, TweetRepository tweetRepository, HashTagRepository hashTagRepository, ClientMapper clientMapper, TweetMapper tweetMapper, ClientRepository clientRepository, ClientService clientService) {
 		this.tweetRepository = tweetRepository;
 		this.clientMapper = clientMapper;
@@ -122,8 +122,8 @@ public class TweetService {
 		return clientMapper.fromClientList(tweetRepository.findOneById(id).getMentions());
 	}
 
-	
-	
+
+
 	public List<HashTagDto> getTagFromTweet(Integer id) {
 		return hashTagMapper.fromHashTagList(tweetRepository.findOneById(id).getHashTags());
 	}
@@ -145,17 +145,17 @@ public class TweetService {
 	public TweetDto replyTweet(Integer id, TweetDto tweetDto) {
 		Tweet oldTweet = tweetRepository.findOneById(id);
 		if (oldTweet == null || 
-		!clientService.getClientExists(tweetDto.getCredentials().getUsername()) ||
-		tweetDto.getContent() == null)
+				!clientService.getClientExists(tweetDto.getCredentials().getUsername()) ||
+				tweetDto.getContent() == null)
 			return null;
-		
+
 		else {
-		postTweet(tweetDto);
-		Tweet newTweet = tweetRepository.findTopByCredentialsUsernameOrderByIdDesc(tweetDto.getCredentials().getUsername());
-		oldTweet.getChildTweets().add(newTweet);
-		tweetRepository.save(oldTweet);
-		newTweet.setParentTweet(oldTweet);
-		return tweetMapper.toDto(newTweet);
+			postTweet(tweetDto);
+			Tweet newTweet = tweetRepository.findTopByCredentialsUsernameOrderByIdDesc(tweetDto.getCredentials().getUsername());
+			oldTweet.getChildTweets().add(newTweet);
+			tweetRepository.save(oldTweet);
+			newTweet.setParentTweet(oldTweet);
+			return tweetMapper.toDto(newTweet);
 		}
 	}
 	public List<TweetDto> getReplies(Integer id) {
@@ -181,14 +181,14 @@ public class TweetService {
 	public List<TweetDto> getContext(Integer id) {
 		Tweet tweet = tweetRepository.findOneById(id);
 		context.add(tweet);
-		if (tweet.getParentTweet() != null){
-			Tweet parentTweet = tweet.getParentTweet();
-			while(parentTweet != null){
-				if (!context.contains(parentTweet))
-					context.add(parentTweet);
-				parentTweet = parentTweet.getParentTweet();
-			}
+		//		if (tweet.getParentTweet() != null){
+		Tweet parentTweet = tweet.getParentTweet();
+		while(parentTweet != null){
+			if (!context.contains(parentTweet))
+				context.add(parentTweet);
+			parentTweet = parentTweet.getParentTweet();
 		}
+		//		}
 		if(tweet.getChildTweets() != null) {
 			childTweetTree(tweet.getChildTweets());
 		}

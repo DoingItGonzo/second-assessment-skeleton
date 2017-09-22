@@ -8,8 +8,9 @@ public class TweetDto {
 
 	private Credentials credentials;
 	private String content;
+//	private Integer id;
+//	private Long timestamp;
 	
-
 	public Credentials getCredentials() {
 		return credentials;
 	}
